@@ -27,6 +27,8 @@ npm run build
 ## android app
 
 ```sh
+yarn install  
+
 npm install -g @ionic/cli @capacitor/cli
 npx cap init messwerte de.berlin.gd.messwerte
 npx cap copy
