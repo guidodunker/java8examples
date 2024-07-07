@@ -24,6 +24,21 @@ Build the application in production mode by running:
 npm run build
 ```
 
+## android app
+
+```sh
+npm install -g @ionic/cli @capacitor/cli
+npx cap init messwerte de.berlin.gd.messwerte
+npx cap copy
+npm install @capacitor/core  @capacitor/android
+npx cap add android       
+
+npm run build
+npx cap sync 
+npx cap open android
+```
+
+
 ## DataProvider
 
 The included data provider use [FakeREST](https://github.com/marmelab/fakerest) to simulate a backend.
