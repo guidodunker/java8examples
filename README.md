@@ -1,4 +1,4 @@
-# messwerte
+# Tims Messwerte App
 
 ## Installation
 
