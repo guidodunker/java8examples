@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">messwerte</string>
+    <string name="title_activity_main">messwerte</string>
+    <string name="package_name">de.berlin.gd.messwerte</string>
+    <string name="custom_url_scheme">de.berlin.gd.messwerte</string>
+</resources>
