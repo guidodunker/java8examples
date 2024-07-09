@@ -2,7 +2,7 @@ import { useGetList } from 'react-admin';
 import { Resource, ShowGuesser, AdminUI } from "react-admin";
 import { Layout } from "../Layout";
 
-import { MesswerteListe, MesswertCreate, MesswertEdit } from "./messwerte_liste";
+import { MesswerteListe, MesswertCreate, MesswertEdit, MesswertShow  } from "./messwerte_liste";
 import { DbListe, DbCreate, DbEdit } from "./db_liste";
 
 import PostIcon from '@mui/icons-material/Book';
@@ -34,7 +34,7 @@ export const WerteListen = () => {
                    name={record.name}
                    list={MesswerteListe}
                    edit={MesswertEdit}
-                   show={ShowGuesser}
+                   show={MesswertShow}
                    create={MesswertCreate({ info: record.info })}
                    icon={PostIcon}
                    />

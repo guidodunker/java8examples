@@ -4,7 +4,7 @@ import { List, Datagrid, TextField, EmailField,
   downloadCSV,
   EditButton,
   useNotify, Toolbar, SaveButton,
-  useListContext
+  useListContext, Show, SimpleShowLayout
 } from "react-admin";
 import { useFormContext } from 'react-hook-form';
 import { unparse as convertToCSV } from 'papaparse-min/papaparse.min';
@@ -27,12 +27,28 @@ const PostBulkActionButtons = () => {
 };
 
 
+const komma = (str?:String) => {
+  if((!str) || str.length===0) {
+    return "0,0"
+  }
+  if(str.length===1) {
+    return str + ",0"
+  }
+  const s1 = str.substring(0,1)
+  const s2 = str.substring(1)
+  return s1 + "," + s2
+}
+
 const exporterShare = async (werte) => {
-  const csv = convertToCSV({
-    data: werte,
-    // select and order fields in the export
-    fields: ['info', 'länge', 'wert1', 'wert2', 'kommentar']
-  });
+  var csvString = "Info; Länge; 1550; 1625; Kommentar\n";
+  for (var data of werte) {
+    csvString = csvString + (data.info ? data.info : "") + ";"
+    csvString = csvString + (data.länge ? data.länge : "") + ";"
+    csvString = csvString + komma(data['_1550']) + ";"
+    csvString = csvString + komma(data['_1625']) + ";"
+    csvString = csvString + (data.kommentar ? data.kommentar : "") + "\n"
+  }
+  
   var liste: String = ""  
   var count=0;
   for (var data of werte) {
@@ -40,12 +56,13 @@ const exporterShare = async (werte) => {
     liste = liste + 
       "F" + count + ":\n" +
       "L: " + (data.länge ? data.länge : "") + "\n" +
-      "1550: " + (data.wert1 ? data.wert1 : "") + "\n" +
-      "1625: " + (data.wert2 ? data.wert2 : "") + "\n" + 
+      "1550: " + komma(data['_1550']) + "\n" +
+      "1625: " + komma(data['_1625']) + "\n" + 
       (data.kommentar ? "Kommentar: " + data.kommentar + "\n" : "") +
       "\n"
   }
-  const content = liste + "\n\n--------------------------------\n\n" + csv
+  const content = liste + "\n\n--------------------------------\n\n" + csvString
+  console.log("content: " + content)
   const result = await Filesystem.writeFile({
     path:  'werte.txt',
     data: content,
@@ -66,8 +83,8 @@ export const MesswerteListe = () => (
     <List  exporter={exporterShare}>
         <Datagrid  bulkActionButtons={<PostBulkActionButtons />}>
             <TextField source="länge" />
-            <TextField source="wert1" />
-            <TextField source="wert2" />
+            <TextField source="_1550" />
+            <TextField source="_1625" />
             <EditButton />
         </Datagrid>
     </List>
@@ -111,8 +128,8 @@ export const MesswertCreate = (aDefaultValue:any) => (
     <SimpleForm toolbar={<PostCreateToolbar />} defaultValues={aDefaultValue}>
       <TextInput source="info" />
       <TextInput source="länge" type="number" />
-      <TextInput source="wert1" type="number" />
-      <TextInput source="wert2" type="number" />
+      <TextInput source="_1550" type="number" />
+      <TextInput source="_1625" type="number" />
       <TextInput source="kommentar" onKeyUp={action} />
     </SimpleForm>
   </Create>
@@ -125,9 +142,21 @@ export const MesswertEdit = () => (
     <SimpleForm>
       <TextInput source="info" />
       <TextInput source="länge" type="number" />
-      <TextInput source="wert1" type="number" />
-      <TextInput source="wert2" type="number" />
+      <TextInput source="_1550" type="number" />
+      <TextInput source="_1625" type="number" />
       <TextInput source="kommentar" />
     </SimpleForm>
   </Edit>
+);
+
+export const MesswertShow = () => (
+  <Show>
+    <SimpleShowLayout>
+      <TextField  source="info" />
+      <TextField  source="länge"  />
+      <TextField  source="_1550"  />
+      <TextField  source="_1625"  />
+      <TextField  source="kommentar" />
+    </SimpleShowLayout>
+  </Show>
 );
