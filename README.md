@@ -26,6 +26,9 @@ npm run build
 
 ## android app
 
+see: https://capacitorjs.com/solution/react
+
+
 ```sh
 yarn install  
 
