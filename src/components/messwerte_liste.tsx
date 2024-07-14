@@ -53,7 +53,7 @@ export const MesswerteListe = (aDefaultValue:any) => {
     var messlängeHinweis = "";
     if(aDefaultValue?.messlänge) {
       messlänge = +(aDefaultValue?.messlänge);
-      messlängeHinweis = "Die Messlänge von " + messlänge + " Metern wurde abgezogen. \n\n";
+      messlängeHinweis = "Das Patchkabel mit der Länge von " + messlänge + " Metern wurde abgezogen. \n\n";
     } else {
       messlänge = 0;
     }
@@ -76,7 +76,6 @@ export const MesswerteListe = (aDefaultValue:any) => {
         "L: " + korrigierteLänge(data.länge, messlänge) + "\n" +
         "1550: " + komma(data['_1550']) + "\n" +
         "1625: " + komma(data['_1625']) + "\n" + 
-        (data.info ? "Info: " + data.info + "\n" : "") +
         (data.kommentar ? "Kommentar: " + data.kommentar + "\n" : "") +
         "\n"
     }
