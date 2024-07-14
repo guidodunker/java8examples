@@ -8,6 +8,7 @@ export const DbListe = () => (
         <Datagrid>
             <TextField source="name" />
             <TextField source="info" />
+            <TextField label="Patchkabel" source="messlänge" cap />
             <EditButton />
         </Datagrid>
     </List>
@@ -22,7 +23,8 @@ export const DbCreate = () => (
     <SimpleForm>
       <TextInput source="name" />
       <TextInput source="info" />
-    </SimpleForm>
+      <TextInput label="Patchkabel" source="messlänge" />
+      </SimpleForm>
   </Create>
   </>
 );
@@ -32,6 +34,7 @@ export const DbEdit = () => (
     <SimpleForm>
       <TextInput source="name" />
       <TextInput source="info" />
+      <TextInput label="Patchkabel" source="messlänge" type="number" />
     </SimpleForm>
   </Edit>
 );

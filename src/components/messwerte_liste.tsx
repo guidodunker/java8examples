@@ -12,7 +12,6 @@ import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import { CustomMoveUpButton, CustomMoveDownButton  } from './custom_move_button';
 
-// const { resource } = useListContext();
 
 const PostBulkActionButtons = () => {
   const { resource } = useListContext();
@@ -39,47 +38,67 @@ const komma = (str?:String) => {
   return s1 + "," + s2
 }
 
-const exporterShare = async (werte) => {
-  var csvString = "Info; Länge; 1550; 1625; Kommentar\n";
-  for (var data of werte) {
-    csvString = csvString + (data.info ? data.info : "") + ";"
-    csvString = csvString + (data.länge ? data.länge : "") + ";"
-    csvString = csvString + komma(data['_1550']) + ";"
-    csvString = csvString + komma(data['_1625']) + ";"
-    csvString = csvString + (data.kommentar ? data.kommentar : "") + "\n"
+const korrigierteLänge = (länge: number|undefined, messlänge: number) => {
+  if(länge) {
+    return länge - messlänge
+  } else {
+    return "";
   }
-  
-  var liste: String = ""  
-  var count=0;
-  for (var data of werte) {
-    count++
-    liste = liste + 
-      "F" + count + ":\n" +
-      "L: " + (data.länge ? data.länge : "") + "\n" +
-      "1550: " + komma(data['_1550']) + "\n" +
-      "1625: " + komma(data['_1625']) + "\n" + 
-      (data.kommentar ? "Kommentar: " + data.kommentar + "\n" : "") +
-      "\n"
-  }
-  const content = liste + "\n\n--------------------------------\n\n" + csvString
-  console.log("content: " + content)
-  const result = await Filesystem.writeFile({
-    path:  'werte.txt',
-    data: content,
-    directory: Directory.Cache,
-    encoding: Encoding.UTF8,
-    recursive: false
-    });
-  await Share.share({
-    title: 'Messwerte',
-    text: 'Hier die gemessenen Werte von ...',
-    url: result.uri,
-    dialogTitle: 'Teile mit Chef',
-  });
 }
 
+export const MesswerteListe = (aDefaultValue:any) => {
 
-export const MesswerteListe = () => (
+  const exporterShare = async (werte) => {
+    var messlänge:number|undefined = undefined;
+    var messlängeHinweis = "";
+    if(aDefaultValue?.messlänge) {
+      messlänge = +(aDefaultValue?.messlänge);
+      messlängeHinweis = "Die Messlänge von " + messlänge + " Metern wurde abgezogen. \n\n";
+    } else {
+      messlänge = 0;
+    }
+
+    var csvString = "Info; Länge; 1550; 1625; Kommentar\n";
+    for (var data of werte) {
+      csvString = csvString + (data.info ? data.info : "") + ";"
+      csvString = csvString + korrigierteLänge(data.länge, messlänge) + ";"
+      csvString = csvString + komma(data['_1550']) + ";"
+      csvString = csvString + komma(data['_1625']) + ";"
+      csvString = csvString + (data.kommentar ? data.kommentar : "") + "\n"
+    }
+    
+    var liste: String = messlängeHinweis 
+    var count=0;
+    for (var data of werte) {
+      count++
+      liste = liste + 
+        "F" + count + ":\n" +
+        "L: " + korrigierteLänge(data.länge, messlänge) + "\n" +
+        "1550: " + komma(data['_1550']) + "\n" +
+        "1625: " + komma(data['_1625']) + "\n" + 
+        (data.info ? "Info: " + data.info + "\n" : "") +
+        (data.kommentar ? "Kommentar: " + data.kommentar + "\n" : "") +
+        "\n"
+    }
+    const content = liste + "\n\n--------------------------------\n\n" + csvString
+    console.log("content: " + content)
+    const result = await Filesystem.writeFile({
+      path:  'werte.txt',
+      data: content,
+      directory: Directory.Cache,
+      encoding: Encoding.UTF8,
+      recursive: false
+      });
+    await Share.share({
+      title: 'Messwerte',
+      text: 'Hier die gemessenen Werte von ...',
+      url: result.uri,
+      dialogTitle: 'Teile mit Chef',
+    });
+  }
+  
+
+  return (
     <List  exporter={exporterShare}>
         <Datagrid  bulkActionButtons={<PostBulkActionButtons />}>
             <TextField source="länge" />
@@ -88,7 +107,8 @@ export const MesswerteListe = () => (
             <EditButton />
         </Datagrid>
     </List>
-);
+  )
+};
 
 const PostCreateToolbar = () => {
   const notify = useNotify();

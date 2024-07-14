@@ -27,16 +27,18 @@ export const WerteListen = () => {
                     show={ShowGuesser}
                     create={DbCreate}
                     icon={UserIcon}
+                    options={{ label: 'Messungen' }}
                 />
                 Datensätze: <br></br>
                 {data.map(record =>
                    <Resource
                    name={record.name}
-                   list={MesswerteListe}
+                   list={MesswerteListe({ messlänge: record.messlänge })}
                    edit={MesswertEdit}
                    show={MesswertShow}
                    create={MesswertCreate({ info: record.info })}
                    icon={PostIcon}
+                   options={{ label: record.name }}
                    />
                 )}
         </AdminUI>
