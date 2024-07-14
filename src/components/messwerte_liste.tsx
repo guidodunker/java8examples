@@ -51,6 +51,11 @@ export const MesswerteListe = (aDefaultValue:any) => {
   const exporterShare = async (werte) => {
     var messlänge:number|undefined = undefined;
     var messlängeHinweis = "";
+    var messungName = "Messwerte";
+    if(aDefaultValue.name) {
+      messungName = aDefaultValue.name
+    }
+
     if(aDefaultValue?.messlänge) {
       messlänge = +(aDefaultValue?.messlänge);
       messlängeHinweis = "Das Patchkabel mit der Länge von " + messlänge + " Metern wurde abgezogen. \n\n";
@@ -89,10 +94,10 @@ export const MesswerteListe = (aDefaultValue:any) => {
       recursive: false
       });
     await Share.share({
-      title: 'Messwerte',
-      text: 'Hier die gemessenen Werte von ...',
+      title: 'Messwerte: ' + messungName,
+      text: 'Hier die gemessenen Werte der Messung: ' + messungName,
       url: result.uri,
-      dialogTitle: 'Teile mit Chef',
+      dialogTitle: 'Teile',
     });
   }
   

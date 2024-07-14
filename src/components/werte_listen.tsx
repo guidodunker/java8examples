@@ -33,7 +33,7 @@ export const WerteListen = () => {
                 {data.map(record =>
                    <Resource
                    name={record.name}
-                   list={MesswerteListe({ messlänge: record.messlänge })}
+                   list={MesswerteListe({ messlänge: record.messlänge, name: record.name })}
                    edit={MesswertEdit}
                    show={MesswertShow}
                    create={MesswertCreate({ info: record.info })}
