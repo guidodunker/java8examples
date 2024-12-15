@@ -12,7 +12,7 @@ export const WerteListen = () => {
     const { data, total, isPending, error } = useGetList(
         'db',
         { 
-            pagination: { page: 1, perPage: 10 },
+            pagination: { page: 1, perPage: 500 },
             sort: { field: 'id', order: 'ASC' }
         }
     );
